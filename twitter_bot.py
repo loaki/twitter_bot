@@ -20,7 +20,9 @@ def fav_media(user_id, pic_id, api):
             new_status = False
         if fav_status.favorite_count < Status.favorite_count:
             fav_status = Status
-    if new_status == True and status_time('loaki_bot', api) == True:
+    if status_time('loaki_bot', api) == False:
+        new_status = False
+    if new_status == True:
         pic_id = timeline[0].id
     fav_pic = fav_status.entities['media'][0]['media_url']
     return fav_pic, pic_id, new_status
@@ -71,6 +73,8 @@ pic_id = 0
 while 1:
     fav_pic, pic_id, new_status = fav_media('archillect', pic_id, api)
     if new_status == True:
+        print('?')
+        '''
         dl_image(fav_pic)
         merge_image('merge.jpg', 'dl.jpg')
-        api.update_with_media('merge.jpg')
+        api.update_with_media('merge.jpg')'''
