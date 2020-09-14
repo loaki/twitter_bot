@@ -1,11 +1,20 @@
 import tweepy
 import os
 import requests
-from datetime import datetime
+import datetime
 from PIL import Image
 
-def fav_media(user_id, pic_id):
-    timeline = api.user_timeline(id = user_id, include_rts=False, count = 42)
+def status_time(user_id, api):
+    timeline = api.user_timeline(id = user_id, include_rts=False, count = 1)
+    diff_time = datetime.datetime.now() - timeline[0].created_at
+    print(timeline[0].text)
+    print(timeline[0].created_at, (datetime.datetime.now().hour - timeline[0].created_at.hour))
+    if diff_time.days == 0 and (datetime.datetime.now().hour - timeline[0].created_at.hour) <= 2:
+        return False
+    return True
+
+def fav_media(user_id, pic_id, api):
+    timeline = api.user_timeline(id = user_id, include_rts=False, count = 6)
     fav_status = timeline[0]
     new_status = True
     for Status in timeline:
@@ -13,7 +22,7 @@ def fav_media(user_id, pic_id):
             new_status = False
         if fav_status.favorite_count < Status.favorite_count:
             fav_status = Status
-    if new_status == True:
+    if new_status == True and status_time('loaki_bot', api) == True:
         pic_id = timeline[0].id
     fav_pic = fav_status.entities['media'][0]['media_url']
     return fav_pic, pic_id, new_status
@@ -62,7 +71,7 @@ except:
 
 pic_id = 0
 while 1:
-    fav_pic, pic_id, new_status = fav_media('archillect', pic_id)
+    fav_pic, pic_id, new_status = fav_media('archillect', pic_id, api)
     if new_status == True:
         dl_image(fav_pic)
         merge_image('merge.jpg', 'dl.jpg')
