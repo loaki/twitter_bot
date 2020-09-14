@@ -4,21 +4,26 @@ import requests
 from datetime import datetime
 from PIL import Image
 
-def fav_media(id):
-    timeline = api.user_timeline(id, include_rts=False)
+def fav_media(user_id, pic_id):
+    timeline = api.user_timeline(id = user_id, include_rts=False, count = 42)
     fav_status = timeline[0]
+    new_status = True
     for Status in timeline:
+        if fav_status.id == pic_id:
+            new_status = False
         if fav_status.favorite_count < Status.favorite_count:
             fav_status = Status
-    fav_media = fav_status.entities['media'][0]['media_url']
-    return fav_media
+    if new_status == True:
+        pic_id = timeline[0].id
+    fav_pic = fav_status.entities['media'][0]['media_url']
+    return fav_pic, pic_id, new_status
 
 def merge_image(im1, im2):
     im1 = Image.open(im1)
     im2 = Image.open(im2)
     w1, h1 = im1.size
     w2, h2 = im2.size
-    size = (min(w1, w2), min(h1, h2))
+    size = (w2, h2)
     im3 = Image.new('RGB',size)
     pix1 = im1.load()
     pix2 = im2.load()
@@ -29,7 +34,7 @@ def merge_image(im1, im2):
             i2 = float(i) / float(size[0]) * w2
             j1 = float(j) / float(size[1]) * h1
             j2 = float(j) / float(size[1]) * h2
-            pix3[i,j] = ((pix1[i1,j1][0] + pix2[i2,j2][0]) / 2, (pix1[i1,j1][1] + pix2[i2,j2][1]) / 2, (pix1[i1,j1][2] + pix2[i2,j2][2]) / 2) 
+            pix3[i,j] = int((pix1[i1,j1][0] + pix2[i2,j2][0]) / 2), int((pix1[i1,j1][1] + pix2[i2,j2][1]) / 2), int((pix1[i1,j1][2] + pix2[i2,j2][2]) / 2)
     im3.save('merge.jpg')
 
 def dl_image(url):
@@ -55,10 +60,10 @@ except:
     print("Error during authentication")
     exit()
 
+pic_id = 0
 while 1:
-    time = datetime.now().strftime("%M")
-    if time == 42:
-        fav_media = fav_media('archillect')
-        dl_image(fav_media)
+    fav_pic, pic_id, new_status = fav_media('archillect', pic_id)
+    if new_status == True:
+        dl_image(fav_pic)
         merge_image('merge.jpg', 'dl.jpg')
         api.update_with_media('merge.jpg')
