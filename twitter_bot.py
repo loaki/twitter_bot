@@ -6,8 +6,7 @@ from PIL import Image
 
 def status_time(user_id, api):
     timeline = api.user_timeline(id = user_id, include_rts=False, count = 1)
-    diff_time = datetime.datetime.now() - timeline[0].created_at
-    if diff_time.days == 0 and (datetime.datetime.now().hour - timeline[0].created_at.hour) <= 2:
+    if datetime.datetime.now() < timeline[0].created_at:
         return False
     return True
 
@@ -73,8 +72,6 @@ pic_id = 0
 while 1:
     fav_pic, pic_id, new_status = fav_media('archillect', pic_id, api)
     if new_status == True:
-        print('?')
-        '''
         dl_image(fav_pic)
         merge_image('merge.jpg', 'dl.jpg')
-        api.update_with_media('merge.jpg')'''
+        api.update_with_media('merge.jpg')
