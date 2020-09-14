@@ -7,8 +7,6 @@ from PIL import Image
 def status_time(user_id, api):
     timeline = api.user_timeline(id = user_id, include_rts=False, count = 1)
     diff_time = datetime.datetime.now() - timeline[0].created_at
-    print(timeline[0].text)
-    print(timeline[0].created_at, (datetime.datetime.now().hour - timeline[0].created_at.hour))
     if diff_time.days == 0 and (datetime.datetime.now().hour - timeline[0].created_at.hour) <= 2:
         return False
     return True
