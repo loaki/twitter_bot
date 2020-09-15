@@ -45,9 +45,7 @@ def merge_image(im1, im2):
             i2 = float(i) / float(size[0]) * w2
             j1 = float(j) / float(size[1]) * h1
             j2 = float(j) / float(size[1]) * h2
-            pix3[i,j] = int((n_im * pix1[i1,j1][0] + pix2[i2,j2][0]) / (n_im + 1)), \
-                int((n_im * pix1[i1,j1][1] + pix2[i2,j2][1]) / (n_im + 1)), \
-                int((n_im * pix1[i1,j1][2] + pix2[i2,j2][2]) / (n_im + 1))
+            pix3[i,j] = int((n_im * pix1[i1,j1][0] + pix2[i2,j2][0]) / (n_im + 1)), int((n_im * pix1[i1,j1][1] + pix2[i2,j2][1]) / (n_im + 1)), int((n_im * pix1[i1,j1][2] + pix2[i2,j2][2]) / (n_im + 1))
     im3.save('merge.jpg')
     data_file = open('data.json', 'w+')
     json.dump(n_im + 1, data_file)
