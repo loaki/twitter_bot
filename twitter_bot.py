@@ -15,14 +15,14 @@ def fav_media(user_id, pic_id, api):
     fav_status = timeline[0]
     new_status = True
     for Status in timeline:
-        if fav_status.id == pic_id:
+        if Status.id == pic_id:
             new_status = False
         if fav_status.favorite_count < Status.favorite_count:
             fav_status = Status
     if status_time('loaki_bot', api) == False:
         new_status = False
     if new_status == True:
-        pic_id = timeline[0].id
+        pic_id = fav_status.id
     fav_pic = fav_status.entities['media'][0]['media_url']
     return fav_pic, pic_id, new_status
 
