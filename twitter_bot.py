@@ -75,10 +75,13 @@ except:
     print("Error during authentication")
     exit()
 
-pic_id = 0
-while 1:
-    fav_pic, pic_id, new_status = fav_media('archillect', pic_id, api)
-    if new_status == True:
-        dl_image(fav_pic)
-        merge_image('merge.jpg', 'dl.jpg')
-        api.update_with_media('merge.jpg')
+try:
+    pic_id = 0
+    while 1:
+        fav_pic, pic_id, new_status = fav_media('archillect', pic_id, api)
+        if new_status == True:
+            dl_image(fav_pic)
+            merge_image('merge.jpg', 'dl.jpg')
+            api.update_with_media('merge.jpg')
+finally:
+    api.send_direct_message(api.get_user('loaki_').id, 'bot got killed')
