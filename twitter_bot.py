@@ -1,12 +1,13 @@
 import tweepy
 import os
 import requests
-import datetime
+from datetime import datetime, timedelta, time
+import json
 from PIL import Image
 
 def status_time(user_id, api):
     timeline = api.user_timeline(id = user_id, include_rts=False, count = 1)
-    if datetime.datetime.now() < timeline[0].created_at:
+    if (datetime.now() - timedelta(hours=3)) < timeline[0].created_at:
         return False
     return True
 
@@ -36,14 +37,20 @@ def merge_image(im1, im2):
     pix1 = im1.load()
     pix2 = im2.load()
     pix3 = im3.load()
+    data_file = open('data.json', 'r+')
+    n_im =json.load(data_file) 
     for i in range(size[0]):
         for j in range(size[1]):
             i1 = float(i) / float(size[0]) * w1
             i2 = float(i) / float(size[0]) * w2
             j1 = float(j) / float(size[1]) * h1
             j2 = float(j) / float(size[1]) * h2
-            pix3[i,j] = int((pix1[i1,j1][0] + pix2[i2,j2][0]) / 2), int((pix1[i1,j1][1] + pix2[i2,j2][1]) / 2), int((pix1[i1,j1][2] + pix2[i2,j2][2]) / 2)
+            pix3[i,j] = int((n_im * pix1[i1,j1][0] + pix2[i2,j2][0]) / (n_im + 1)), \
+                int((n_im * pix1[i1,j1][1] + pix2[i2,j2][1]) / (n_im + 1)), \
+                int((n_im * pix1[i1,j1][2] + pix2[i2,j2][2]) / (n_im + 1))
     im3.save('merge.jpg')
+    data_file = open('data.json', 'w+')
+    json.dump(n_im + 1, data_file)
 
 def dl_image(url):
     filename = 'dl.jpg'
