@@ -8,6 +8,9 @@ from PIL import Image
 def status_time(user_id, api):
     # Check last status date
     timeline = api.user_timeline(id = user_id, include_rts=False, count = 1)
+    # Utc
+    #if (datetime.now() - timedelta(hours=3)) < timeline[0].created_at:
+    # Fr time    
     if (datetime.now() - timedelta(hours=3)) < timeline[0].created_at:
         return False
     return True
@@ -47,7 +50,7 @@ def merge_image(im1, im2):
             i2 = float(i) / float(size[0]) * w2
             j1 = float(j) / float(size[1]) * h1
             j2 = float(j) / float(size[1]) * h2
-            pix3[i,j] = int((pix1[i1,j1][0] + pix2[i2,j2][0]) / 2), int((pix1[i1,j1][1] + pix2[i2,j2][1]) / 2), int((pix1[i1,j1][2] + pix2[i2,j2][2]) / 2)
+            pix3[i,j] = (pix1[i1,j1][0] + pix2[i2,j2][0]) / 2, (pix1[i1,j1][1] + pix2[i2,j2][1]) / 2, (pix1[i1,j1][2] + pix2[i2,j2][2]) / 2
     im3.save('merge.jpg')
     data_file = open('data.json', 'w+')
     json.dump(n_im + 1, data_file)
