@@ -1,7 +1,7 @@
 import tweepy
-import os
+import time
 import requests
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta
 import json
 from PIL import Image
 
@@ -87,5 +87,6 @@ try:
                 dl_image(fav_pic)
                 merge_image('merge.jpg', 'dl.jpg')
                 api.update_with_media('merge.jpg')
+            time.sleep(60)
 finally:
     api.send_direct_message(api.get_user('loaki_').id, 'bot got killed')
