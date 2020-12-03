@@ -72,7 +72,7 @@ try:
 except:
     print("Error during authentication")
     exit()
-
+print('bot started')
 try:
     pic_id = 0
     date_min = datetime.now().strftime("%M")
