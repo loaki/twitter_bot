@@ -2,7 +2,6 @@ import tweepy
 import time
 import requests
 from datetime import datetime, timedelta
-import json
 from PIL import Image
 
 def status_time(user_id, api):
@@ -41,9 +40,7 @@ def merge_image(im1, im2):
     im3 = Image.new('RGB',size)
     pix1 = im1.load()
     pix2 = im2.load()
-    pix3 = im3.load()
-    data_file = open('data.json', 'r+')
-    n_im =json.load(data_file) 
+    pix3 = im3.load() 
     for i in range(size[0]):
         for j in range(size[1]):
             i1 = float(i) / float(size[0]) * w1
@@ -52,8 +49,6 @@ def merge_image(im1, im2):
             j2 = float(j) / float(size[1]) * h2
             pix3[i,j] = (pix1[i1,j1][0] + pix2[i2,j2][0]) / 2, (pix1[i1,j1][1] + pix2[i2,j2][1]) / 2, (pix1[i1,j1][2] + pix2[i2,j2][2]) / 2
     im3.save('merge.jpg')
-    data_file = open('data.json', 'w+')
-    json.dump(n_im + 1, data_file)
 
 def dl_image(url):
     filename = 'dl.jpg'
