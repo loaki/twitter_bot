@@ -60,6 +60,7 @@ def dl_image(url):
     else:
         print("Unable to download image")
 
+print('bot started')
 # Authenticate to Twitter
 auth = tweepy.OAuthHandler("3mdV9PUlft7Bxj2M4yyZTvIL7", "cyHM0m6tuE8ncDkFydt1TJXVwJETPMvCoSTabM9sgG35iteWVC")
 auth.set_access_token("1305165317564493824-MPx4QIvv0q2IKTZrtkGGBsJL1Hznpr", "VrCnxrVbA9Pk8GttVkfQZ1na7eTYQq39TeUjZsKk7igqV")
@@ -72,7 +73,6 @@ try:
 except:
     print("Error during authentication")
     exit()
-print('bot started')
 try:
     pic_id = 0
     date_min = datetime.now().strftime("%M")
